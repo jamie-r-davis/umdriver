@@ -1,7 +1,7 @@
 from selenium.webdriver import Chrome, Firefox, Ie, PhantomJS
 from selenium.common.exceptions import TimeoutException
 
-from driver.pages import LoginPage
+from umdriver.pages import LoginPage
 
 
 class UMDriver(Chrome, Firefox, Ie, PhantomJS):
