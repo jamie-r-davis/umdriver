@@ -13,7 +13,7 @@ class LoginPage:
     """Page object for the UM Weblogin page."""
     URL = 'https://weblogin.umich.edu'
     LOCS = {
-        'username': (By.ID, 'login'),
+        'username': (By.ID, 'login-visible'),
         'password': (By.ID, 'password'),
         'submit': (By.ID, 'loginSubmit'),
         'error_msg': (By.CSS_SELECTOR, 'div.alert-danger'),
