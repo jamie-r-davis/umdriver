@@ -1,6 +1,8 @@
-from selenium.common.exceptions import (ElementNotVisibleException,
-                                        NoSuchElementException,
-                                        TimeoutException)
+from selenium.common.exceptions import (
+    ElementNotVisibleException,
+    NoSuchElementException,
+    TimeoutException,
+)
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
@@ -11,14 +13,16 @@ from umdriver.exceptions import LoginError
 
 class LoginPage:
     """Page object for the UM Weblogin page."""
-    URL = 'https://weblogin.umich.edu'
+
+    URL = "https://weblogin.umich.edu"
     LOCS = {
-        'username': (By.ID, 'login-visible'),
-        'password': (By.ID, 'password'),
-        'submit': (By.ID, 'loginSubmit'),
-        'error_msg': (By.CSS_SELECTOR, 'div.alert-danger'),
-        'helpblock_username': (By.ID, 'helpBlock-login'),
-        'helpblock_password': (By.ID, 'helpBlock-password')
+        "username": (By.ID, "login-visible"),
+        "username2": (By.ID, "login"),
+        "password": (By.ID, "password"),
+        "submit": (By.ID, "loginSubmit"),
+        "error_msg": (By.CSS_SELECTOR, "div.alert-danger"),
+        "helpblock_username": (By.ID, "helpBlock-login"),
+        "helpblock_password": (By.ID, "helpBlock-password"),
     }
 
     def __init__(self, driver):
@@ -26,23 +30,29 @@ class LoginPage:
 
     @property
     def username(self):
-        el = self.d.find_element(*self.LOCS['username'])
-        return el.get_attribute('value')
+        try:
+            el = self.d.find_element(*self.LOCS["username"])
+        except NoSuchElementException:
+            el = self.d.find_element(*self.LOCS["username2"])
+        return el.get_attribute("value")
 
     @username.setter
     def username(self, value):
-        el = self.d.find_element(*self.LOCS['username'])
+        try:
+            el = self.d.find_element(*self.LOCS["username"])
+        except NoSuchElementException:
+            el = self.d.find_element(*self.LOCS["username2"])
         el.clear()
         el.send_keys(value + Keys.TAB)
 
     @property
     def password(self):
-        el = self.d.find_element(*self.LOCS['password'])
-        return el.get_attribute('value')
+        el = self.d.find_element(*self.LOCS["password"])
+        return el.get_attribute("value")
 
     @password.setter
     def password(self, value):
-        el = self.d.find_element(*self.LOCS['password'])
+        el = self.d.find_element(*self.LOCS["password"])
         el.clear()
         el.send_keys(value + Keys.TAB)
 
@@ -53,7 +63,7 @@ class LoginPage:
 
     def _submit(self):
         """Click the submit button."""
-        el = self.d.find_element(*self.LOCS['submit'])
+        el = self.d.find_element(*self.LOCS["submit"])
         el.click()
 
     def submit(self):
@@ -62,14 +72,14 @@ class LoginPage:
         if self.error_msgs:
             raise LoginError(self.error_msgs)
         wait = WebDriverWait(self.d, 180)
-        print('Waiting for DUO authentication...')
+        print("Waiting for DUO authentication...")
         try:
-            wait.until(lambda d: d.title != 'U-M Weblogin')
+            wait.until(lambda d: d.title != "U-M Weblogin")
         except TimeoutException:
-            print('Login failed.')
+            print("Login failed.")
             raise
         else:
-            print('Login successful.')
+            print("Login successful.")
 
     @property
     def error_msgs(self):
@@ -80,30 +90,30 @@ class LoginPage:
         errors = []
         # capture errors from alert dialog
         try:
-            el = self.d.find_element(*self.LOCS['error_msg'])
+            el = self.d.find_element(*self.LOCS["error_msg"])
         except (NoSuchElementException, ElementNotVisibleException):
             pass  # error is not present
         else:
             banner_error = el.text.strip()
-            if banner_error != '':
+            if banner_error != "":
                 errors.append(banner_error)
         # capture errors from username helptext
         try:
-            el = self.d.find_element(*self.LOCS['helpblock_username'])
+            el = self.d.find_element(*self.LOCS["helpblock_username"])
         except (NoSuchElementException, ElementNotVisibleException):
             pass
         else:
             username_error = el.text.strip()
-            if username_error != '':
+            if username_error != "":
                 errors.append(username_error)
         # capture errors from password helptext
         try:
-            el = self.d.find_element(*self.LOCS['helpblock_password'])
+            el = self.d.find_element(*self.LOCS["helpblock_password"])
         except (NoSuchElementException, ElementNotVisibleException):
             pass
         else:
             password_error = el.text.strip()
-            if password_error != '':
+            if password_error != "":
                 errors.append(password_error)
             errors.append(el.text.strip())
         return errors
