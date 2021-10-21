@@ -4,7 +4,7 @@ from selenium.common.exceptions import TimeoutException
 from umdriver.pages import LoginPage
 
 
-class UMDriver(Chrome, Firefox, Ie, PhantomJS):
+class UMDriver(Chrome, Firefox, Ie):
 
     URLS = {'prod': 'https://weblogin.umich.edu',
             'test': 'https://weblogin-test.itcs.umich.edu/'}
