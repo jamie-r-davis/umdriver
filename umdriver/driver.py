@@ -1,4 +1,4 @@
-from selenium.webdriver import Chrome, Firefox, Ie, PhantomJS
+from selenium.webdriver import Chrome, Firefox, Ie
 from selenium.common.exceptions import TimeoutException
 
 from umdriver.pages import LoginPage
@@ -14,10 +14,8 @@ class UMDriver(Chrome, Firefox, Ie, PhantomJS):
             Chrome.__init__(self, **kwargs)
         elif driver.lower() == 'ie':
             Ie.__init__(self, **kwargs)
-        elif driver.lower() == 'firefox':
-            Firefox.__init__(self, **kwargs)
         else:
-            PhantomJS.__init__(self, **kwargs)
+            Firefox.__init__(self, **kwargs)
 
     def login(self, username, password, env='prod'):
         """Log in to UMich authenticated resources.
