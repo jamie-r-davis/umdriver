@@ -5,7 +5,7 @@ with open("README.md", "r") as f:
 
 setuptools.setup(
     name="umdriver",
-    version="0.0.7",
+    version="0.0.8",
     author="Jamie Davis",
     author_email="jamjam@umich.edu",
     description=(
